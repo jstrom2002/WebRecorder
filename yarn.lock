@@ -7835,6 +7835,11 @@
     "regenerator-runtime" "0.13.2"
     "whatwg-fetch" "3.0.0"
 
+"react-audio-voice-recorder@^1.0.4":
+  "integrity" "sha512-NqMQqZZIau8cmzKUsf43s8rWF5lJPPebj+o6tkcX83dv2lLDdJL+jUFspynMSEZq+/T8NJYH2QUqqDAv9XF4Xw=="
+  "resolved" "https://registry.npmjs.org/react-audio-voice-recorder/-/react-audio-voice-recorder-1.0.4.tgz"
+  "version" "1.0.4"
+
 "react-dev-utils@^9.0.1":
   "integrity" "sha512-pnaeMo/Pxel8aZpxk1WwxT3uXxM3tEwYvsjCYn5R7gNxjhN1auowdcLDzFB8kr7rafAj2rxmvfic/fbac5CzwQ=="
   "resolved" "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-9.0.1.tgz"
@@ -7866,7 +7871,7 @@
     "strip-ansi" "5.2.0"
     "text-table" "0.2.0"
 
-"react-dom@^16.8.6", "react-dom@>=16.8":
+"react-dom@^16.8.6", "react-dom@>=16.2.0", "react-dom@>=16.8":
   "integrity" "sha512-1nL7PIq9LTL3fthPqwkvr2zY7phIPjYrT0jp4HjyEQrEROnw4dG41VVwi/wfoCneoleqrNX7iAD+pXebJZwrwA=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-16.8.6.tgz"
   "version" "16.8.6"
@@ -7961,7 +7966,7 @@
   optionalDependencies:
     "fsevents" "2.0.6"
 
-"react@^16.0.0", "react@^16.8.6", "react@>=16.8":
+"react@^16.0.0", "react@^16.8.6", "react@>=16.2.0", "react@>=16.8":
   "integrity" "sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.8.6.tgz"
   "version" "16.8.6"
