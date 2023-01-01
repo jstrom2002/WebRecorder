@@ -1,8 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom";
 import { useAudioRecorder, AudioRecorder } from "react-audio-voice-recorder";
 
-const App = () => {
+const main = () => {
   const recorderControls = useAudioRecorder();
   const addAudioElement = blob => {
     const url = URL.createObjectURL(blob);
@@ -18,15 +16,9 @@ const App = () => {
         onRecordingComplete={blob => addAudioElement(blob)}
         recorderControls={recorderControls}
       />
-      <br />
       <button onClick={recorderControls.stopRecording}>Stop recording</button>
     </div>
   );
 };
 
-ReactDOM.render(
-  <div>
-    <App />
-  </div>,
-  document.getElementById("root"),
-);
+main();
