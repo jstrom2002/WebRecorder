@@ -3,7 +3,7 @@ import { useAudioRecorder, AudioRecorder } from "react-audio-voice-recorder";
 
 const App = () => {
   const recorderControls = useAudioRecorder();
-  const addAudioElement = (blob) => {
+  const addAudioElement = blob => {
     const url = URL.createObjectURL(blob);
     const audio = document.createElement("audio");
     audio.src = url;
@@ -14,7 +14,7 @@ const App = () => {
   return (
     <div>
       <AudioRecorder
-        onRecordingComplete={(blob) => addAudioElement(blob)}
+        onRecordingComplete={blob => addAudioElement(blob)}
         recorderControls={recorderControls}
       />
       <br />
