@@ -2,7 +2,7 @@
   "name": "web-audio-recorder",
   "version": "0.0.0",
   "description": "Online audio recorder for multiple parties",
-  "main": "app.js",
+  "main": "index.js",
   "homepage": "https://jstrom2002.github.io/WebRecorder/",
   "dependencies": {
     "react": "^18.2.0",
