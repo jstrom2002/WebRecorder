@@ -10,18 +10,16 @@ const addAudioElement = (blob: any) => {
   document.body.appendChild(audio);
 };
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <AudioRecorder
-          onRecordingComplete={(blob) => addAudioElement(blob)}
-          recorderControls={recorderControls}
-        />
-        <button onClick={recorderControls.stopRecording}>Stop recording</button>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <div>
+      <AudioRecorder
+        onRecordingComplete={(blob: any) => addAudioElement(blob)}
+        recorderControls={recorderControls}
+      />
+      <button onClick={recorderControls.stopRecording}>Stop recording</button>
+    </div>
+  );
 }
 
 export default App;
