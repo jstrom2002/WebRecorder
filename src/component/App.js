@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 import { useAudioRecorder, AudioRecorder } from "react-audio-voice-recorder";
 
 const App = () => {
