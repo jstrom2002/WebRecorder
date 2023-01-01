@@ -2,7 +2,7 @@
   "name": "WebRecorder",
   "version": "0.1.0",
   "license": "MIT",
-  "homepage": "https://jstrom2002.github.io/WebRecorder",
+  "homepage": "https://jstrom2002.github.io/WebRecorder/public",
   "devDependencies": {
     "chai": "^4.2.0",
     "gh-pages": "^2.2.0",
