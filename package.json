@@ -1,0 +1,45 @@
+{
+  "name": "web-audio-recorder",
+  "version": "0.0.0",
+  "description": "Online audio recorder for multiple parties",
+  "main": "app.js",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-audio-voice-recorder": "^1.0.4",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "gh-pages": "^2.0.1",
+    "prettier": "^1.17.1",
+    "react-scripts": "^5.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jstrom2002/WebRecorder"
+  },
+  "keywords": [
+    "recorder"
+  ],
+  "author": "JH Strom",
+  "license": "MIT",
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
