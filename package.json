@@ -1,44 +1,30 @@
 {
-  "name": "web-audio-recorder",
-  "version": "0.0.0",
-  "description": "Online audio recorder for multiple parties",
-  "main": "index.js",
-  "homepage": "https://jstrom2002.github.io/WebRecorder/public",
-  "dependencies": {
-    "babel-preset-react": "^6.24.1",
-    "react": "^18.2.0",
-    "react-audio-voice-recorder": "^1.0.4",
-    "react-dom": "^18.2.0",
-    "yarn": "^1.22.19"
-  },
+  "name": "WebRecorder",
+  "version": "0.1.0",
+  "license": "MIT",
+  "homepage": "https://jstrom2002.github.io/WebRecorder",
   "devDependencies": {
     "chai": "^4.2.0",
-    "gh-pages": "^2.2.0",
+    "gh-pages": "^2.0.1",
     "prettier": "^1.17.1",
-    "react-scripts": "^5.0.1",
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/preset-react": "^7.10.4",
-    "babel-loader": "^8.1.0"
+    "react-scripts": "^3.0.1"
+  },
+  "dependencies": {
+    "big.js": "^5.2.2",
+    "github-fork-ribbon-css": "^0.2.1",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jstrom2002/WebRecorder"
+  "prettier": {
+    "trailingComma": "all"
   },
-  "keywords": [
-    "recorder"
-  ],
-  "author": "JH Strom",
-  "license": "MIT",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -49,11 +35,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "babel": {
-    "presets": [
-      "react-app"
     ]
   }
 }
