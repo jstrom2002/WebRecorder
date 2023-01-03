@@ -19,7 +19,7 @@ const App = () => {
   return (
     <div>
       <AudioRecorder
-        onRecordingComplete={(blob) => AddFinishedRecording(blob)}
+        onRecordingComplete={AddFinishedRecording}
         recorderControls={recorderControls}
       />
       <button onClick={recorderControls.stopRecording}>Stop recording</button>

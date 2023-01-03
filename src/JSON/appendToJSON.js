@@ -1,4 +1,4 @@
-export default appendToJSON(recordingData);
+export default function appendToJSON(recordingData);
 {
   fs.readFile(
     "recordingHistory.json",
