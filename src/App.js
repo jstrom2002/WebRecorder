@@ -1,4 +1,5 @@
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
+import { appendToJSON } from "./JSON/appendToJSON";
 
 const App = () => {
   const recorderControls = useAudioRecorder();
@@ -10,10 +11,15 @@ const App = () => {
     document.body.appendChild(audio);
   };
 
+  function AddFinishedRecording(blob) {
+    appendToJSON(blob);
+    addAudioElement(blob);
+  }
+
   return (
     <div>
       <AudioRecorder
-        onRecordingComplete={(blob) => addAudioElement(blob)}
+        onRecordingComplete={(blob) => AddFinishedRecording(blob)}
         recorderControls={recorderControls}
       />
       <button onClick={recorderControls.stopRecording}>Stop recording</button>
