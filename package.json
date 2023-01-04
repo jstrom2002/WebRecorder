@@ -3,21 +3,21 @@
   "version": "0.1.0",
   "private": true,
   "homepage": "https://jstrom2002.github.io/WebRecorder/",
-  "main": "src/index.js",
+  "main": "src/index.tsx",
   "dependencies": {
     "@mantine/core": "^5.10.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "firebase": "^9.15.0",
     "react": "^18.2.0",
     "react-audio-voice-recorder": "^1.0.4",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "predeploy": "npm run build",
+    "predeploy": "react-scripts build",
     "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -43,7 +43,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^4.0.0",
-    "typescript": "^4.9.4"
+    "gh-pages": "^4.0.0"
   }
 }

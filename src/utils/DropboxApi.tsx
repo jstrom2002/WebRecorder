@@ -1,6 +1,6 @@
 const accessToken = "<ADD ACCESS TOKEN HERE>";
 
-export function getPwd(pwdToCheck) {
+export function getPwd() {
   fetch("https://content.dropboxapi.com/2/files/download", {
     method: "POST",
     headers: {
@@ -15,7 +15,7 @@ export function getPwd(pwdToCheck) {
     });
 }
 
-export function uploadDBFile(blob) {
+export function uploadDBFile(blob: any) {
   fetch("https://content.dropboxapi.com/2/files/upload", {
     method: "POST",
     headers: {
@@ -47,7 +47,7 @@ export function listDropboxFiles() {
     });
 }
 
-export function appendDataToDatabase(blob) {
+export function appendDataToDatabase(blob: any) {
   fetch("https://content.dropboxapi.com/2/files/download", {
     method: "POST",
     headers: {

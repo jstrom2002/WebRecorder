@@ -6,7 +6,6 @@ import {
   TextInput,
   Title,
 } from "@mantine/core";
-import { appendDataToDatabase, ResetDatabase } from "../utils/DropboxApi";
 import { useState } from "react";
 
 export default function LoginPage() {

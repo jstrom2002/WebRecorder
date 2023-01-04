@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export default function MainPage() {
   const recorderControls = useAudioRecorder();
-  const addAudioElement = (blob) => {
+  const addAudioElement = (blob: any) => {
     const url = URL.createObjectURL(blob);
     const audio = document.createElement("audio");
     audio.src = url;
@@ -13,7 +13,7 @@ export default function MainPage() {
     document.body.appendChild(audio);
   };
 
-  async function AddFinishedRecording(blob) {
+  async function AddFinishedRecording(blob: any) {
     appendDataToDatabase(await blob.text());
     addAudioElement(blob);
   }
