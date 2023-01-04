@@ -6,8 +6,4 @@ export default class User extends React.Component {
     password: "",
     roles: [],
   };
-
-  constructor(props) {
-    super();
-  }
 }

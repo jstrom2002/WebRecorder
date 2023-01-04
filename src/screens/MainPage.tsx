@@ -26,6 +26,9 @@ export default function MainPage() {
         withCloseButton={false}
         opened={opened}
         title="Delete Database Contents?"
+        onClose={() => {
+          setOpened(false);
+        }}
       >
         <Text>NOTE: Deleted data cannot be recovered</Text>
         <Flex direction="row" style={{ justifyContent: "center" }}>
