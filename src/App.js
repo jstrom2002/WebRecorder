@@ -1,5 +1,13 @@
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
-import { Button, Flex, Modal, Text } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Modal,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { appendDataToDatabase, ResetDatabase } from "./DropboxApi";
 import { useState } from "react";
 
@@ -18,9 +26,17 @@ const App = () => {
     addAudioElement(blob);
   }
 
-  const [opened, setOpened] = useState(false);
+  async function loginCallback() {
+    if (true) {
+      setLopggedIn(true);
+    }
+  }
 
-  return (
+  const [opened, setOpened] = useState(false);
+  const [loggedIn, setLopggedIn] = useState(false);
+  const [onRegisterPage, setOnRegisterPage] = useState(false);
+
+  return loggedIn && !onRegisterPage ? (
     <>
       <Modal
         withCloseButton={false}
@@ -46,14 +62,61 @@ const App = () => {
           </Button>
         </Flex>
       </Modal>
-
       <Button onClick={() => setOpened(true)}>Reset Database</Button>
-
       <Text>Click Microphone to Start Recording:</Text>
       <AudioRecorder
         onRecordingComplete={AddFinishedRecording}
         recorderControls={recorderControls}
       />
+    </>
+  ) : (
+    <>
+      <Flex
+        style={{
+          justifyContent: "center",
+          width: "50%",
+          minHeight: "50%",
+          margin: "17.5% 25%",
+          border: "solid",
+        }}
+        direction="column"
+      >
+        <Title align="center">Login</Title>
+        <TextInput
+          style={{
+            width: "50%",
+            height: "50%",
+            margin: "0px 25%",
+          }}
+          placeholder="User Name"
+          label="User Name"
+        />
+        <PasswordInput
+          style={{
+            width: "50%",
+            height: "50%",
+            margin: "0px 25%",
+          }}
+          placeholder="Password"
+          label="Password"
+          withAsterisk
+        />
+        <Flex style={{ justifyContent: "center" }}>
+          <Button variant="subtle" style={{ margin: "0px 20px" }}>
+            Register
+          </Button>
+          <Button variant="subtle" style={{ margin: "0px 20px" }}>
+            Forgot Password
+          </Button>
+          <Button
+            onClick={loginCallback}
+            style={{ width: "12em", margin: "0px 20px" }}
+          >
+            Login
+          </Button>
+          <br />
+        </Flex>
+      </Flex>
     </>
   );
 };
