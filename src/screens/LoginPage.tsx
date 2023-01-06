@@ -11,11 +11,22 @@ import { IconExternalLink } from "@tabler/icons";
 
 export interface LoginPageProps {
   loginHandler: any;
+  currentPageHandler: any;
 }
 export default class LoginPage extends React.Component<LoginPageProps> {
   constructor(props: LoginPageProps) {
     super(props);
-    this.state = { loginHandler: props.loginHandler };
+    this.state = {
+      loginHandler: props.loginHandler,
+      currentPageHandler: props.currentPageHandler,
+    };
+  }
+
+  componentWillReceiveProps(props: LoginPageProps) {
+    this.setState({
+      loginHandler: props.loginHandler,
+      currentPageHandler: props.currentPageHandler,
+    });
   }
 
   render() {
@@ -52,7 +63,11 @@ export default class LoginPage extends React.Component<LoginPageProps> {
             withAsterisk
           />
           <Flex style={{ justifyContent: "center" }}>
-            <Button variant="subtle" style={{ margin: "0px 20px" }}>
+            <Button
+              onClick={() => this.props.currentPageHandler("SettingsPage")}
+              variant="subtle"
+              style={{ margin: "0px 20px" }}
+            >
               Register
             </Button>
             <Button variant="subtle" style={{ margin: "0px 20px" }}>
