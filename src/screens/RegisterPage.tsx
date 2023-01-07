@@ -8,38 +8,21 @@ import {
   Title,
 } from "@mantine/core";
 import React, { useRef, useState } from "react";
-import { IconArrowLeft } from "@tabler/icons";
 import ReturnArrow from "../components/ReturnArrow";
-import { isConstructorDeclaration } from "typescript";
-
-function useEmail() {
-  const [userEmail, setUserEmail] = useState("");
-  return () => setUserEmail(userEmail);
-}
-
-function usePassword() {
-  const [userPassword, setUserPassword] = useState("");
-  return () => setUserPassword(userPassword);
-}
-
-function useRefCode() {
-  const [userReferralCode, setUserReferralCode] = useState("");
-  return () => setUserReferralCode(userReferralCode);
-}
+import { getUserDB } from "../utils/DropboxApi";
 
 const RegisterPage = (props: any) => {
-  const uEmail = useEmail();
-  const uPassword = usePassword();
-  const uRefCode = useRefCode();
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userReferralCode, setUserReferralCode] = useState("");
 
-  const textInput = useRef(null);
-
-  function registerCallback() {
+  async function registerCallback() {
     // 1. confirm user does not already exist with email
     // 2. validate referral code
     // 3. get dropbox user file and append new user details
 
-    console.log(textInput.current.value);
+    let db = await getUserDB();
+    console.log(db);
   }
 
   return (
@@ -62,20 +45,22 @@ const RegisterPage = (props: any) => {
           Register
         </Title>
         <TextInput
-          ref={textInput}
           label="Email"
-          onChange={uEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
+          value={userEmail}
           title="Email"
         ></TextInput>
         <PasswordInput
           label="Password"
-          onChange={uPassword}
+          onChange={(e) => setUserPassword(e.target.value)}
+          value={userPassword}
           title="Password"
           withAsterisk={true}
         ></PasswordInput>
         <TextInput
           label="Referral Code"
-          onChange={uRefCode}
+          onChange={(e) => setUserReferralCode(e.target.value)}
+          value={userReferralCode}
           title="Referral Code"
           withAsterisk={true}
         ></TextInput>

@@ -1,4 +1,4 @@
-const accessToken = "<ADD ACCESS TOKEN HERE>";
+const accessToken = "<ADD API TOKEN HERE>";
 
 export function getPwd() {
   fetch("https://content.dropboxapi.com/2/files/download", {
@@ -44,6 +44,21 @@ export function listDropboxFiles() {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
+    });
+}
+
+export async function getUserDB() {
+  fetch("https://content.dropboxapi.com/2/files/download", {
+    method: "POST",
+    headers: {
+      authorization: "Bearer " + accessToken,
+      "Content-Type": "text/plain",
+      "Dropbox-API-Arg": '{"path":"/user.json"}',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data;
     });
 }
 
