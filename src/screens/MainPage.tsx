@@ -1,5 +1,5 @@
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
-import { Button, Flex, Modal, Text } from "@mantine/core";
+import { Button, Flex, Modal, Text, Title } from "@mantine/core";
 import { appendDataToDatabase, ResetDatabase } from "../utils/DropboxApi";
 import { useState } from "react";
 
@@ -7,14 +7,15 @@ export default function MainPage() {
   const recorderControls = useAudioRecorder();
   const addAudioElement = (blob: any) => {
     const url = URL.createObjectURL(blob);
+    const audioDiv = document.getElementById("AudioRecorderDiv");
     const audio = document.createElement("audio");
     audio.src = url;
     audio.controls = true;
-    document.body.appendChild(audio);
+    audioDiv?.appendChild(audio);
   };
 
   async function AddFinishedRecording(blob: any) {
-    appendDataToDatabase(await blob.text());
+    //appendDataToDatabase(await blob.text());
     addAudioElement(blob);
   }
 
@@ -49,12 +50,34 @@ export default function MainPage() {
           </Button>
         </Flex>
       </Modal>
-      <Button onClick={() => setOpened(true)}>Reset Database</Button>
-      <Text>Click Microphone to Start Recording:</Text>
-      <AudioRecorder
-        onRecordingComplete={AddFinishedRecording}
-        recorderControls={recorderControls}
-      />
+
+      <Flex direction="column" style={{ alignItems: "center" }}>
+        <Title size="h3" style={{ alignSelf: "center" }}>
+          Host A Recording Session
+        </Title>
+        <br />
+        <Flex id="AudioRecorderDiv" direction="column">
+          <Text>Click Microphone to Start Recording:</Text>
+          <AudioRecorder
+            onRecordingComplete={AddFinishedRecording}
+            recorderControls={recorderControls}
+          />
+        </Flex>
+        <br />
+        <br />
+
+        <Title size="h5" style={{ alignSelf: "center" }}>
+          Database Contents:
+        </Title>
+        <Flex
+          direction="column"
+          style={{ minHeight: "10em", minWidth: "10em", border: "solid" }}
+        ></Flex>
+        <br />
+        <Button style={{ width: "15%" }} onClick={() => setOpened(true)}>
+          Empty Database
+        </Button>
+      </Flex>
     </>
   );
 }

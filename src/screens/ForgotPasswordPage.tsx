@@ -2,18 +2,15 @@ import {
   ActionIcon,
   Button,
   Flex,
-  PasswordInput,
   Text,
   TextInput,
   Title,
 } from "@mantine/core";
 import { useState } from "react";
-import { IconArrowLeft } from "@tabler/icons";
 import ReturnArrow from "../components/ReturnArrow";
 
-const RegisterPage = (props: any) => {
+const ForgotPasswordPage = (props: any) => {
   const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
 
   return (
     <>
@@ -32,25 +29,21 @@ const RegisterPage = (props: any) => {
         }}
       >
         <Title size="h3" style={{ alignSelf: "center" }}>
-          Register
+          Send Password Reset Email
         </Title>
         <TextInput
           label="Email"
           value={userEmail}
           onChange={() => setUserEmail(userEmail)}
-          title="Email"
-        ></TextInput>
-        <TextInput
-          label="Password"
-          value={userPassword}
-          onChange={() => setUserPassword(userPassword)}
-          title="Password"
+          title="email"
         ></TextInput>
         <br />
-        <Button style={{ width: "50%", alignSelf: "center" }}>Register</Button>
+        <Button style={{ width: "50%", alignSelf: "center" }}>
+          Send Reset Email
+        </Button>
       </Flex>
     </>
   );
 };
 
-export default RegisterPage;
+export default ForgotPasswordPage;
