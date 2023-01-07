@@ -10,8 +10,6 @@ import { useState } from "react";
 import ReturnArrow from "../components/ReturnArrow";
 
 const ForgotPasswordPage = (props: any) => {
-  const [userEmail, setUserEmail] = useState("");
-
   return (
     <>
       <ReturnArrow
@@ -31,14 +29,9 @@ const ForgotPasswordPage = (props: any) => {
         <Title size="h3" style={{ alignSelf: "center" }}>
           Send Password Reset Email
         </Title>
-        <TextInput
-          label="Email"
-          value={userEmail}
-          onChange={() => setUserEmail(userEmail)}
-          title="email"
-        ></TextInput>
+        <TextInput label="Email"></TextInput>
         <br />
-        <Button style={{ width: "50%", alignSelf: "center" }}>
+        <Button style={{ width: "20%", alignSelf: "center" }}>
           Send Reset Email
         </Button>
       </Flex>
