@@ -21,8 +21,20 @@ const RegisterPage = (props: any) => {
     // 2. validate referral code
     // 3. get dropbox user file and append new user details
 
-    let db = await getUserDB();
-    console.log(db);
+    const accessToken = "<API ACCESS TOKEN>";
+
+    fetch("https://content.dropboxapi.com/2/files/download", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer " + accessToken,
+        "Content-Type": "text/plain",
+        "Dropbox-API-Arg": '{"path":"/user.json"}',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
   }
 
   return (
