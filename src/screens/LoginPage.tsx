@@ -24,8 +24,10 @@ const LoginPage = (props: any) => {
             height: "50%",
             margin: "0px 25%",
           }}
-          placeholder="User Name"
-          label="User Name"
+          placeholder="Email"
+          label="Account Email"
+          value={props.email}
+          onChange={(e) => props.setEmail(e.target.value)}
         />
         <PasswordInput
           style={{
@@ -36,6 +38,8 @@ const LoginPage = (props: any) => {
           placeholder="Password"
           label="Password"
           withAsterisk
+          value={props.password}
+          onChange={(e) => props.setPassword(e.target.value)}
         />
         <br />
         <Flex style={{ justifyContent: "center" }}>

@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve",
+    "allowJs": true,
     "types": ["node"],
     "baseUrl": ".",
     "paths": {

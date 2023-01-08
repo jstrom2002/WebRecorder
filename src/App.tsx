@@ -9,19 +9,35 @@ import { useState } from "react";
 import { AppShell } from "@mantine/core";
 
 export default function App() {
-  async function loginCallback(logState: boolean) {
-    if (true) {
-      setLoggedIn(logState);
-      setOnCurrentPage("MainPage");
-    }
-  }
-
-  async function currentPageHandler(pageName: string) {
-    setOnCurrentPage(pageName);
-  }
-
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentPage, setOnCurrentPage] = useState("LoginPage");
+  const [currentPage, currentPageHandler] = useState("LoginPage");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function loginCallback(logState: boolean) {
+    const accessToken = "<ADD API ACCESS TOKEN>";
+
+    fetch("https://api.dropboxapi.com/2/check/user ", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer " + accessToken,
+        "Content-Type": "application/json",
+        "Dropbox-API-Arg": '{"path":"/user.json"}',
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        let foundEntry = data.entries.find(
+          (entry: any) => entry.email === email && entry.password === password
+        );
+        if (foundEntry) {
+          setLoggedIn(logState);
+          currentPageHandler("MainPage");
+          setEmail(foundEntry.email);
+          setPassword(foundEntry.password);
+        }
+      });
+  }
 
   function SelectScreen() {
     switch (currentPage) {
@@ -53,20 +69,17 @@ export default function App() {
             currentPageHandler={currentPageHandler}
           />
         );
-      case "MainPage":
+      default:
         return loggedIn ? (
           <MainPage />
         ) : (
           <LoginPage
             loginHandler={() => loginCallback(true)}
             currentPageHandler={currentPageHandler}
-          />
-        );
-      default:
-        return (
-          <LoginPage
-            loginHandler={() => loginCallback(true)}
-            currentPageHandler={currentPageHandler}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
           />
         );
     }
