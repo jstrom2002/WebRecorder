@@ -7,15 +7,19 @@ import {
   Title,
 } from "@mantine/core";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ReturnArrow from "../components/ReturnArrow";
 
 const ForgotPasswordPage = (props: any) => {
+  const navigate = useNavigate();
+  function forgotPasswordHandler() {
+    // Send email here to remind user of password.
+    navigate("/");
+  }
+
   return (
     <>
-      <ReturnArrow
-        loggedIn={props.loggedIn}
-        currentPageHandler={props.currentPageHandler}
-      />
+      <ReturnArrow />
 
       <Flex
         direction="column"
@@ -31,7 +35,10 @@ const ForgotPasswordPage = (props: any) => {
         </Title>
         <TextInput label="Email"></TextInput>
         <br />
-        <Button style={{ width: "20%", alignSelf: "center" }}>
+        <Button
+          onClick={forgotPasswordHandler}
+          style={{ width: "20%", alignSelf: "center" }}
+        >
           Send Reset Email
         </Button>
       </Flex>

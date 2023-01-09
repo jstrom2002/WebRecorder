@@ -1,29 +1,16 @@
-import {
-  ActionIcon,
-  Button,
-  Flex,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import { useState } from "react";
+import { Button } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 import { IconArrowLeft } from "@tabler/icons";
 
 const ReturnArrow = (props: any) => {
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-
+  const navigate = useNavigate();
   return (
     <>
       <Button
         variant="subtle"
         leftIcon={<IconArrowLeft />}
         style={{ color: "#000000" }}
-        onClick={() =>
-          props.loggedIn
-            ? props.currentPageHandler("MainPage")
-            : props.currentPageHandler("LoginPage")
-        }
+        onClick={() => navigate("/")}
       >
         Back
       </Button>

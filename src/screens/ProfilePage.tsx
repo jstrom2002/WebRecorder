@@ -4,11 +4,7 @@ import ReturnArrow from "../components/ReturnArrow";
 const ProfilePage = (props: any) => {
   return (
     <>
-      <ReturnArrow
-        loggedIn={props.loggedIn}
-        currentPageHandler={props.currentPageHandler}
-      />
-
+      <ReturnArrow />
       <Flex direction="column" style={{ alignItems: "center" }}>
         <Title size="h3">Profile</Title>
         <TextInput style={{ width: "50%" }} label="Username" />

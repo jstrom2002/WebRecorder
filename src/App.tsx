@@ -5,14 +5,16 @@ import ProfilePage from "./screens/ProfilePage";
 import SettingsPage from "./screens/SettingsPage";
 import ForgotPasswordPage from "./screens/ForgotPasswordPage";
 import AppHeader from "./components/AppHeader";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppShell } from "@mantine/core";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Redirect from "./components/Redirect";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [currentPage, currentPageHandler] = useState("LoginPage");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accessToken, setAccessToken] = useState("");
 
   async function loginCallback(
     doLogin: boolean,
@@ -23,8 +25,6 @@ export default function App() {
       setLoggedIn(false);
       return;
     }
-
-    const accessToken = "<ADD API ACCESS TOKEN>";
 
     fetch("https://content.dropboxapi.com/2/files/download", {
       method: "POST",
@@ -43,72 +43,47 @@ export default function App() {
         );
         if (foundEntry) {
           setLoggedIn(true);
-          currentPageHandler("MainPage");
           setEmail(foundEntry.email);
           setPassword(foundEntry.password);
         }
       });
   }
 
-  function SelectScreen() {
-    switch (currentPage) {
-      case "ForgotPasswordPage":
-        return (
-          <ForgotPasswordPage
-            loggedIn={loggedIn}
-            currentPageHandler={currentPageHandler}
-          />
-        );
-      case "ProfilePage":
-        return (
-          <ProfilePage
-            loggedIn={loggedIn}
-            currentPageHandler={currentPageHandler}
-          />
-        );
-      case "RegisterPage":
-        return (
-          <RegisterPage
-            loggedIn={loggedIn}
-            currentPageHandler={currentPageHandler}
-          />
-        );
-      case "SettingsPage":
-        return (
-          <SettingsPage
-            loggedIn={loggedIn}
-            currentPageHandler={currentPageHandler}
-          />
-        );
-      default:
-        return loggedIn ? (
-          <MainPage />
-        ) : (
-          <LoginPage
-            loginHandler={loginCallback}
-            currentPageHandler={currentPageHandler}
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-          />
-        );
-    }
-  }
-
   return (
     <AppShell
       style={{ background: "#E9ECE6", border: "solid" }}
       layout="alt"
-      header={
-        <AppHeader
-          loggedIn={loggedIn}
-          loginCallback={loginCallback}
-          currentPageHandler={currentPageHandler}
-        />
-      }
+      header={<AppHeader loggedIn={loggedIn} loginCallback={loginCallback} />}
     >
-      <SelectScreen />
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <LoginPage
+              loginHandler={loginCallback}
+              email={email}
+              setEmail={setEmail}
+              password={password}
+              setPassword={setPassword}
+            />
+          }
+        />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot_password" element={<ForgotPasswordPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/settings"
+          element={<SettingsPage loggedIn={loggedIn} />}
+        />
+        <Route
+          path="/dropbox_login"
+          element={
+            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://localhost:3000&response_type=code" />
+          }
+        />
+        <Route path="/" element={<MainPage loggedIn={loggedIn} />} />
+        {/* <SelectScreen /> */}
+      </Routes>
     </AppShell>
   );
 }

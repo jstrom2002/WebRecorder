@@ -1,9 +1,10 @@
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import { Button, Flex, Modal, Text, Title } from "@mantine/core";
 import { appendDataToDatabase, ResetDatabase } from "../utils/DropboxApi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function MainPage() {
+export default function MainPage(props: any) {
   const recorderControls = useAudioRecorder();
   const addAudioElement = (blob: any) => {
     const url = URL.createObjectURL(blob);
@@ -20,6 +21,13 @@ export default function MainPage() {
   }
 
   const [opened, setOpened] = useState(false);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (props.loggedIn == false) {
+      navigate("/dropbox_login");
+    }
+  });
 
   return (
     <>

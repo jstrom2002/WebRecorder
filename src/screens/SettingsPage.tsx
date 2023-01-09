@@ -6,10 +6,7 @@ import ReturnArrow from "../components/ReturnArrow";
 const SettingsPage = (props: any) => {
   return (
     <>
-      <ReturnArrow
-        loggedIn={props.loggedIn}
-        currentPageHandler={props.currentPageHandler}
-      />
+      <ReturnArrow />
 
       <Flex
         direction="column"
