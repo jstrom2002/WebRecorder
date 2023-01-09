@@ -2,6 +2,9 @@ import { Button, Flex, PasswordInput, TextInput, Title } from "@mantine/core";
 import React, { useState } from "react";
 
 const LoginPage = (props: any) => {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+
   return (
     <>
       <Flex
@@ -26,8 +29,8 @@ const LoginPage = (props: any) => {
           }}
           placeholder="Email"
           label="Account Email"
-          value={props.email}
-          onChange={(e) => props.setEmail(e.target.value)}
+          value={userEmail}
+          onChange={(e) => setUserEmail(e.target.value)}
         />
         <PasswordInput
           style={{
@@ -38,8 +41,8 @@ const LoginPage = (props: any) => {
           placeholder="Password"
           label="Password"
           withAsterisk
-          value={props.password}
-          onChange={(e) => props.setPassword(e.target.value)}
+          value={userPassword}
+          onChange={(e) => setUserPassword(e.target.value)}
         />
         <br />
         <Flex style={{ justifyContent: "center" }}>
@@ -58,7 +61,9 @@ const LoginPage = (props: any) => {
             Forgot Password
           </Button>
           <Button
-            onClick={props.loginHandler}
+            onClick={() => {
+              props.loginHandler(true, userEmail, userPassword);
+            }}
             style={{
               width: "12em",
               margin: "0px 20px",

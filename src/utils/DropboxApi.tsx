@@ -15,8 +15,8 @@ export function getPwd() {
     });
 }
 
-export function uploadDBFile(blob: any) {
-  fetch("https://content.dropboxapi.com/2/files/upload", {
+export async function uploadDBFile(blob: any) {
+  await fetch("https://content.dropboxapi.com/2/files/upload", {
     method: "POST",
     headers: {
       authorization: "Bearer " + accessToken,
@@ -25,11 +25,7 @@ export function uploadDBFile(blob: any) {
         '{"autorename":false,"mode":"overwrite","mute":false,"path":"/db.json","strict_conflict":false}',
     },
     body: blob,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      return console.log(data);
-    });
+  });
 }
 
 export function listDropboxFiles() {
@@ -73,9 +69,7 @@ export function appendDataToDatabase(blob: any) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       data.entries.push({ time: Date.now(), data: blob });
-      console.log("sending: " + JSON.stringify(data));
       uploadDBFile(JSON.stringify(data));
     });
 }

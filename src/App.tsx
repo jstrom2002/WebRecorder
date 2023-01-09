@@ -14,24 +14,35 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  async function loginCallback(logState: boolean) {
+  async function loginCallback(
+    doLogin: boolean,
+    email?: string,
+    password?: string
+  ) {
+    if (doLogin == false) {
+      setLoggedIn(false);
+      return;
+    }
+
     const accessToken = "<ADD API ACCESS TOKEN>";
 
-    fetch("https://api.dropboxapi.com/2/check/user ", {
+    fetch("https://content.dropboxapi.com/2/files/download", {
       method: "POST",
       headers: {
         authorization: "Bearer " + accessToken,
-        "Content-Type": "application/json",
+        "Content-Type": "text/plain",
         "Dropbox-API-Arg": '{"path":"/user.json"}',
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then((data) => {
         let foundEntry = data.entries.find(
           (entry: any) => entry.email === email && entry.password === password
         );
         if (foundEntry) {
-          setLoggedIn(logState);
+          setLoggedIn(true);
           currentPageHandler("MainPage");
           setEmail(foundEntry.email);
           setPassword(foundEntry.password);
@@ -74,7 +85,7 @@ export default function App() {
           <MainPage />
         ) : (
           <LoginPage
-            loginHandler={() => loginCallback(true)}
+            loginHandler={loginCallback}
             currentPageHandler={currentPageHandler}
             email={email}
             setEmail={setEmail}
