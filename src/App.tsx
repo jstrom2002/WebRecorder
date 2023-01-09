@@ -72,13 +72,17 @@ export default function App() {
         <Route path="/forgot_password" element={<ForgotPasswordPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route
+          path="/redirect_return"
+          element={<ProfilePage setAccessToken={setAccessToken} />}
+        />
+        <Route
           path="/settings"
           element={<SettingsPage loggedIn={loggedIn} />}
         />
         <Route
           path="/dropbox_login"
           element={
-            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://localhost:3000&response_type=code" />
+            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://localhost:3000/redirect_return/&response_type=code" />
           }
         />
         <Route path="/" element={<MainPage loggedIn={loggedIn} />} />
