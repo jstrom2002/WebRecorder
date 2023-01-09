@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { AppShell } from "@mantine/core";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Redirect from "./components/Redirect";
+import RedirectReturn from "./components/RedirectReturn";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -73,7 +74,7 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="/redirect_return"
-          element={<ProfilePage setAccessToken={setAccessToken} />}
+          element={<RedirectReturn loc="/" setAccessToken={setAccessToken} />}
         />
         <Route
           path="/settings"
@@ -82,9 +83,11 @@ export default function App() {
         <Route
           path="/dropbox_login"
           element={
-            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://localhost:3000/redirect_return/&response_type=code" />
+            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://https://jstrom2002.github.io/WebRecorder/redirect_return&response_type=code" />
           }
         />
+        <Route path="/WebRecorder" element={<MainPage loggedIn={loggedIn} />} />
+        <Route path="/main" element={<MainPage loggedIn={loggedIn} />} />
         <Route path="/" element={<MainPage loggedIn={loggedIn} />} />
         {/* <SelectScreen /> */}
       </Routes>
