@@ -3,6 +3,7 @@ import { Button, Flex, Modal, Text, Title } from "@mantine/core";
 import { appendDataToDatabase, ResetDatabase } from "../utils/DropboxApi";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Buffer } from "buffer";
 
 export default function MainPage(props: any) {
   const recorderControls = useAudioRecorder();
@@ -24,8 +25,36 @@ export default function MainPage(props: any) {
 
   const navigate = useNavigate();
   useEffect(() => {
-    if (props.loggedIn == false) {
-      navigate("/dropbox_login");
+    if (!props.loggedIn) {
+      const queryParams = new URLSearchParams(window.location.search);
+      console.log("queryParams:", queryParams);
+      if (queryParams.get("code")) {
+        const accessToken = queryParams.get("code");
+        console.log("access token:", accessToken);
+        props.setAccessToken(accessToken);
+        const b64Auth = Buffer.from(
+          `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
+        ).toString("base64");
+        console.log("base64 auth:", b64Auth);
+        fetch(
+          `https://api.dropboxapi.com/oauth2/token?code=${accessToken}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: "Basic " + b64Auth,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        )
+          .then((data) => data.json())
+          .then((response) => {
+            console.log("token response:", response);
+            props.setAccessToken(response);
+            props.setLoggedIn(true);
+          });
+      } else if (props.loggedIn == false) {
+        navigate("/dropbox_login");
+      }
     }
   });
 

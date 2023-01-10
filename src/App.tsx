@@ -83,13 +83,41 @@ export default function App() {
         <Route
           path="/dropbox_login"
           element={
-            <Redirect loc="https://www.dropbox.com/oauth2/authorize?client_id=icnl0cqh3rs0oh4&redirect_uri=https://https://jstrom2002.github.io/WebRecorder/redirect_return&response_type=code" />
+            <Redirect
+              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=online&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`}
+            />
           }
         />
-        <Route path="/WebRecorder" element={<MainPage loggedIn={loggedIn} />} />
-        <Route path="/main" element={<MainPage loggedIn={loggedIn} />} />
-        <Route path="/" element={<MainPage loggedIn={loggedIn} />} />
-        {/* <SelectScreen /> */}
+        <Route
+          path="/WebRecorder"
+          element={
+            <MainPage
+              setAccessToken={setAccessToken}
+              setLoggedIn={setLoggedIn}
+              loggedIn={loggedIn}
+            />
+          }
+        />
+        <Route
+          path="/main"
+          element={
+            <MainPage
+              setAccessToken={setAccessToken}
+              setLoggedIn={setLoggedIn}
+              loggedIn={loggedIn}
+            />
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <MainPage
+              setAccessToken={setAccessToken}
+              setLoggedIn={setLoggedIn}
+              loggedIn={loggedIn}
+            />
+          }
+        />
       </Routes>
     </AppShell>
   );
