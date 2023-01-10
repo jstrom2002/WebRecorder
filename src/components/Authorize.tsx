@@ -29,32 +29,43 @@ export default function Authorize(props: any) {
           }
         )
           .then((data) => data.json())
-          .then((response) => {
+          .then((authResponse) => {
             // Save access token and use to verify user email/login against database file.
-            props.setAccessToken(response);
+            props.setAccessToken(authResponse);
 
-            fetch("https://content.dropboxapi.com/2/files/download", {
+            // Use dropbox api to get user email, other info.
+            fetch("https://api.dropboxapi.com/2/users/get_current_account", {
               method: "POST",
               headers: {
-                authorization: "Bearer " + response,
-                "Content-Type": "text/plain",
-                "Dropbox-API-Arg": '{"path":"/user.json"}',
+                authorization: "Bearer " + authResponse,
               },
             })
-              .then((response) => {
-                return response.json();
-              })
-              .then((data) => {
-                let foundEntry = data.entries.find(
-                  (entry: any) =>
-                    entry.email === props.email &&
-                    entry.password === props.password
-                );
-                if (foundEntry) {
-                  props.setLoggedIn(true);
-                  props.setEmail(foundEntry.email);
-                  props.setPassword(foundEntry.password);
-                }
+              .then((userResponse) => userResponse.json())
+              .then((dropboxUserData) => {
+                console.log("current dropbox acct:", dropboxUserData);
+
+                // Get user database from dropbox, compare entries to current user email to verify login.
+                fetch("https://content.dropboxapi.com/2/files/download", {
+                  method: "POST",
+                  headers: {
+                    authorization: "Bearer " + props.accessToken,
+                    "Content-Type": "text/plain",
+                    "Dropbox-API-Arg": '{"path":"/user.json"}',
+                  },
+                })
+                  .then((response) => {
+                    return response.json();
+                  })
+                  .then((data) => {
+                    let foundEntry = data.entries.find(
+                      (entry: any) => entry.email === dropboxUserData.email
+                    );
+                    if (foundEntry && dropboxUserData.email_verified) {
+                      props.setLoggedIn(true);
+                      props.setEmail(foundEntry.email);
+                      props.setPassword(foundEntry.password);
+                    }
+                  });
               });
           });
       }

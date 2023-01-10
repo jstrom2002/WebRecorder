@@ -76,7 +76,9 @@ export default function App() {
           path="/authorize"
           element={
             <Authorize
+              accessToken={accessToken}
               setAccessToken={setAccessToken}
+              requestToken={requestToken}
               setRequestToken={setRequestToken}
               setLoggedIn={setLoggedIn}
               loggedIn={loggedIn}
