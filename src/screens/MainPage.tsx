@@ -35,7 +35,6 @@ export default function MainPage(props: any) {
         const b64Auth = Buffer.from(
           `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
         ).toString("base64");
-        console.log("base64 auth:", b64Auth);
         fetch(
           `https://api.dropboxapi.com/oauth2/token?code=${accessToken}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`,
           {
@@ -48,12 +47,11 @@ export default function MainPage(props: any) {
         )
           .then((data) => data.json())
           .then((response) => {
-            console.log("token response:", response);
             props.setAccessToken(response);
             props.setLoggedIn(true);
           });
       } else if (props.loggedIn == false) {
-        navigate("/dropbox_login");
+        navigate("/landing");
       }
     }
   });

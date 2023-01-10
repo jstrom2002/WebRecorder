@@ -1,21 +1,21 @@
-import LoginPage from "./screens/LoginPage";
 import MainPage from "./screens/MainPage";
 import RegisterPage from "./screens/RegisterPage";
-import ProfilePage from "./screens/ProfilePage";
 import SettingsPage from "./screens/SettingsPage";
 import ForgotPasswordPage from "./screens/ForgotPasswordPage";
 import AppHeader from "./components/AppHeader";
 import { useEffect, useState } from "react";
 import { AppShell } from "@mantine/core";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Redirect from "./components/Redirect";
 import RedirectReturn from "./components/RedirectReturn";
+import LandingPage from "./screens/LandingPage";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const navigate = useNavigate();
 
   async function loginCallback(
     doLogin: boolean,
@@ -24,6 +24,8 @@ export default function App() {
   ) {
     if (doLogin == false) {
       setLoggedIn(false);
+      setAccessToken("");
+      navigate("/landing");
       return;
     }
 
@@ -54,24 +56,17 @@ export default function App() {
     <AppShell
       style={{ background: "#E9ECE6", border: "solid" }}
       layout="alt"
-      header={<AppHeader loggedIn={loggedIn} loginCallback={loginCallback} />}
+      header={
+        <AppHeader
+          email={email}
+          loggedIn={loggedIn}
+          loginCallback={loginCallback}
+        />
+      }
     >
       <Routes>
-        <Route
-          path="/login"
-          element={
-            <LoginPage
-              loginHandler={loginCallback}
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-            />
-          }
-        />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot_password" element={<ForgotPasswordPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
         <Route
           path="/redirect_return"
           element={<RedirectReturn loc="/" setAccessToken={setAccessToken} />}
@@ -88,6 +83,7 @@ export default function App() {
             />
           }
         />
+        <Route path="/landing" element={<LandingPage />} />
         <Route
           path="/WebRecorder"
           element={
