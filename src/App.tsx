@@ -9,6 +9,7 @@ import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Redirect from "./components/Redirect";
 import LandingPage from "./screens/LandingPage";
 import Authorize from "./components/Authorize";
+import { Buffer } from "buffer";
 
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -16,6 +17,8 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [requestToken, setRequestToken] = useState("");
   const [accessToken, setAccessToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [userScopes, setUserScopes] = useState("");
   const navigate = useNavigate();
 
   async function loginCallback(
@@ -30,6 +33,26 @@ export default function App() {
       navigate("/landing");
       return;
     }
+  }
+
+  async function doTokenRefresh(token: string | undefined) {
+    const b64Auth = Buffer.from(
+      `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
+    ).toString("base64");
+    return fetch(
+      `https://api.dropboxapi.com/oauth2/token?refresh_token=${refreshToken}&grant_type=refresh_token`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: "Basic " + b64Auth,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      }
+    )
+      .then((data) => data.json())
+      .then((res) => {
+        return res.access_token;
+      });
   }
 
   return (
@@ -55,7 +78,7 @@ export default function App() {
           path="/dropbox_login"
           element={
             <Redirect
-              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=online&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`}
+              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=offline&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`}
             />
           }
         />
@@ -80,6 +103,11 @@ export default function App() {
               setAccessToken={setAccessToken}
               requestToken={requestToken}
               setRequestToken={setRequestToken}
+              refreshToken={refreshToken}
+              setRefreshToken={setRefreshToken}
+              doTokenRefresh={doTokenRefresh}
+              userScopes={userScopes}
+              setUserScopes={setUserScopes}
               setLoggedIn={setLoggedIn}
               loggedIn={loggedIn}
               email={email}

@@ -64,7 +64,7 @@ export default function MainPage(props: any) {
 
       <Flex direction="column" style={{ alignItems: "center" }}>
         <Title size="h3" style={{ alignSelf: "center" }}>
-          Host A Recording Session
+          Start A Recording Session
         </Title>
         <br />
         <Flex id="AudioRecorderDiv" direction="column">
