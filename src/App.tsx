@@ -40,7 +40,7 @@ export default function App() {
       `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
     ).toString("base64");
     return fetch(
-      `https://api.dropboxapi.com/oauth2/token?refresh_token=${refreshToken}&grant_type=refresh_token`,
+      `https://api.dropboxapi.com/oauth2/token?grant_type=refresh_token&refresh_token=${refreshToken}`,
       {
         method: "POST",
         headers: {
@@ -51,6 +51,7 @@ export default function App() {
     )
       .then((data) => data.json())
       .then((res) => {
+        console.log("returning access token:", res.access_token);
         return res.access_token;
       });
   }
