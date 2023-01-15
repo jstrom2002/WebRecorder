@@ -1,6 +1,24 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
+
+interface AuthorizeProps {
+  accessToken: string;
+  setAccessToken: any;
+  requestToken: string;
+  setRequestToken: any;
+  refreshToken: string;
+  setRefreshToken: any;
+  doTokenRefresh: any;
+  userScopes: string;
+  setUserScopes: any;
+  setLoggedIn: any;
+  loggedIn: string;
+  email: string;
+  setEmail: any;
+  password: string;
+  setPassword: any;
+}
 
 function getAuthToken(requestToken: string) {
   const b64Auth = Buffer.from(
@@ -22,12 +40,13 @@ function getAuthToken(requestToken: string) {
     });
 }
 
-function getCurrentAccount(accessToken: string) {
+function getCurrentAccount(token: string) {
+  console.log("access_token:", token);
   // Use dropbox api to get user email, other info.
   return fetch("https://api.dropboxapi.com/2/users/get_current_account", {
     method: "POST",
     headers: {
-      authorization: "Bearer " + accessToken,
+      Authorization: "Bearer " + token,
     },
   })
     .then((response) => response.json())
@@ -41,7 +60,7 @@ function getUserDB(token: string, email: string) {
   return fetch("https://content.dropboxapi.com/2/files/download", {
     method: "POST",
     headers: {
-      authorization: "Bearer " + token,
+      Authorization: "Bearer " + token,
       "Content-Type": "text/plain",
       "Dropbox-API-Arg": '{"path":"/user.json"}',
     },
@@ -97,7 +116,7 @@ export default function Authorize(props: any) {
     if (props.loggedIn) {
       navigate("/");
     }
-  }, [props, navigate]);
+  });
 
   return <section>Authorizing...</section>;
 }
