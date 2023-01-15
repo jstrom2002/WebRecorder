@@ -3,6 +3,7 @@ import RegisterPage from "./screens/RegisterPage";
 import SettingsPage from "./screens/SettingsPage";
 import ForgotPasswordPage from "./screens/ForgotPasswordPage";
 import AppHeader from "./components/AppHeader";
+import Error404Page from "./screens/Error404Page";
 import { useEffect, useState } from "react";
 import { AppShell } from "@mantine/core";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
@@ -83,17 +84,6 @@ export default function App() {
           }
         />
         <Route path="/landing" element={<LandingPage />} />
-        <Route
-          path="/WebRecorder"
-          element={
-            <MainPage
-              setAccessToken={setAccessToken}
-              setRequestToken={setRequestToken}
-              setLoggedIn={setLoggedIn}
-              loggedIn={loggedIn}
-            />
-          }
-        />
         <Route path="/" element={<MainPage loggedIn={loggedIn} />} />
         <Route
           path="/authorize"
@@ -117,6 +107,7 @@ export default function App() {
             />
           }
         />
+        <Route path="*" element={<Error404Page setLoggedIn={setLoggedIn} />} />
       </Routes>
     </AppShell>
   );
