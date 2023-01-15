@@ -41,7 +41,6 @@ function getAuthToken(requestToken: string) {
 }
 
 function getCurrentAccount(token: string) {
-  console.log("access_token:", token);
   // Use dropbox api to get user email, other info.
   return fetch("https://api.dropboxapi.com/2/users/get_current_account", {
     method: "POST",
@@ -94,12 +93,9 @@ export default function Authorize(props: any) {
           props.doTokenRefresh(res0.refresh_token)?.then((res01: string) => {
             props.setAccessToken(res01);
             getCurrentAccount(res01)?.then((res1: any) => {
-              console.log("user found:", res1);
               props.doTokenRefresh(res0.refresh_token).then((tk2: string) => {
                 props.setAccessToken(tk2);
-                console.log("looking for user:", res1.account.email);
                 getUserDB(tk2, res1.account.email)?.then((res2) => {
-                  console.log("user account found:", res2);
                   if (res2 !== undefined) {
                     props.setLoggedIn(true);
                     props.setEmail(res1.account.email);

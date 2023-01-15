@@ -51,7 +51,6 @@ export default function App() {
     )
       .then((data) => data.json())
       .then((res) => {
-        console.log("returning access token:", res.access_token);
         return res.access_token;
       });
   }
