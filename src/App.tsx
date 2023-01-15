@@ -1,7 +1,6 @@
 import MainPage from "./screens/MainPage";
 import RegisterPage from "./screens/RegisterPage";
 import SettingsPage from "./screens/SettingsPage";
-import ForgotPasswordPage from "./screens/ForgotPasswordPage";
 import AppHeader from "./components/AppHeader";
 import Error404Page from "./screens/Error404Page";
 import { useEffect, useState } from "react";
@@ -70,7 +69,6 @@ export default function App() {
     >
       <Routes>
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot_password" element={<ForgotPasswordPage />} />
         <Route
           path="/settings"
           element={<SettingsPage loggedIn={loggedIn} />}
