@@ -18,12 +18,7 @@ function getAuthToken(requestToken: string) {
   )
     .then((data) => data.json())
     .then((authResponse) => {
-      console.log("auth response:", authResponse);
-      return {
-        access_token: authResponse.accessToken,
-        refresh_token: authResponse.refreshToken,
-        scope: authResponse.scope,
-      };
+      return authResponse;
     });
 }
 
@@ -37,7 +32,6 @@ function getCurrentAccount(accessToken: string) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("current dropbox acct:", data);
       return { account: data };
     });
 }
@@ -65,7 +59,6 @@ export default function Authorize(props: any) {
 
   // Handle page redirect.
   useEffect(() => {
-    console.log("props:", props);
     if (!props.loggedIn) {
       // If on this page after 'dropbox_login' redirect, there will be a query string with the 'code' value for the token api.
       const queryParams = new URLSearchParams(window.location.search);
@@ -73,7 +66,6 @@ export default function Authorize(props: any) {
         const requestToken = queryParams.get("code") ?? "";
         props.setRequestToken(requestToken);
         getAuthToken(requestToken)?.then((res0) => {
-          console.log("auth resp:", res0);
           if (res0.access_token === undefined) {
             return;
           }
@@ -82,14 +74,14 @@ export default function Authorize(props: any) {
           props.setUserScopes(res0.scope);
           props.doTokenRefresh(res0.refresh_token)?.then((res01: string) => {
             props.setAccessToken(res01);
-            getCurrentAccount(props.access_token)?.then((res1) => {
-              console.log("current dropbox acct:", res1.account);
+            getCurrentAccount(res01)?.then((res1) => {
               props.doTokenRefresh(res0.refresh_token).then((tk2: string) => {
                 props.setAccessToken(tk2);
                 getUserDB(tk2, props.email)?.then((res2) => {
                   props.setLoggedIn(true);
                   props.setEmail(res2.email);
                   props.setPassword(res2.password);
+                  window.location.search = "";
                 });
               });
             });

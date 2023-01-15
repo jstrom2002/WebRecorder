@@ -40,7 +40,7 @@ export default function App() {
       `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
     ).toString("base64");
     return fetch(
-      `https://api.dropboxapi.com/oauth2/token?refresh_token=${refreshToken}&grant_type=refresh_token`,
+      `https://api.dropboxapi.com/oauth2/token?refresh_token=${token}&grant_type=refresh_token`,
       {
         method: "POST",
         headers: {
