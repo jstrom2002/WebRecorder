@@ -14,7 +14,6 @@ import { Buffer } from "buffer";
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [requestToken, setRequestToken] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");
@@ -68,7 +67,22 @@ export default function App() {
       }
     >
       <Routes>
-        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/register"
+          element={
+            <RegisterPage
+              accessToken={accessToken}
+              setAccessToken={setAccessToken}
+              requestToken={requestToken}
+              setRequestToken={setRequestToken}
+              refreshToken={refreshToken}
+              setRefreshToken={setRefreshToken}
+              doTokenRefresh={doTokenRefresh}
+              userScopes={userScopes}
+              setUserScopes={setUserScopes}
+            />
+          }
+        />
         <Route
           path="/settings"
           element={<SettingsPage loggedIn={loggedIn} />}
@@ -77,7 +91,15 @@ export default function App() {
           path="/dropbox_login"
           element={
             <Redirect
-              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=offline&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`}
+              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=offline&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_LOGIN_REDIRECT_URL}`}
+            />
+          }
+        />
+        <Route
+          path="/dropbox_register"
+          element={
+            <Redirect
+              loc={`https://www.dropbox.com/oauth2/authorize?token_access_type=offline&client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_REGISTER_REDIRECT_URL}`}
             />
           }
         />
@@ -100,8 +122,6 @@ export default function App() {
               loggedIn={loggedIn}
               email={email}
               setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
             />
           }
         />

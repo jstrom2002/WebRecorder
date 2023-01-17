@@ -42,7 +42,7 @@ export default function LandingPage(props: any) {
           <br />
           <Flex direction="row">
             <Button
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/dropbox_register")}
               style={{
                 width: "12em",
                 margin: "0px 20px",
@@ -64,9 +64,6 @@ export default function LandingPage(props: any) {
               Login
             </Button>
           </Flex>
-          <Button variant="subtle" onClick={() => navigate("/forgot_password")}>
-            Forgot Password
-          </Button>
         </Flex>
       </Flex>
     </>

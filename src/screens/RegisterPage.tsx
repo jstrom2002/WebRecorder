@@ -1,63 +1,149 @@
-import {
-  ActionIcon,
-  Button,
-  Flex,
-  PasswordInput,
-  Text,
-  TextInput,
-  Title,
-} from "@mantine/core";
-import React, { useRef, useState } from "react";
+import { Button, Flex, TextInput, Title } from "@mantine/core";
+import React, { useEffect, useRef, useState } from "react";
 import ReturnArrow from "../components/ReturnArrow";
-import { getUserDB } from "../utils/DropboxApi";
 import { useNavigate } from "react-router-dom";
-import emailjs from "emailjs-com";
+import { Buffer } from "buffer";
+
+function getAuthToken(requestToken: string) {
+  const b64Auth = Buffer.from(
+    `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
+  ).toString("base64");
+  return fetch(
+    `https://api.dropboxapi.com/oauth2/token?code=${requestToken}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REGISTER_REDIRECT_URL}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Basic " + b64Auth,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    }
+  )
+    .then((data) => data.json())
+    .then((authResponse) => {
+      return authResponse;
+    });
+}
+
+function getCurrentAccount(token: string) {
+  // Use dropbox api to get user email, other info.
+  return fetch("https://api.dropboxapi.com/2/users/get_current_account", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return { account: data };
+    });
+}
+
+function getUserDB(token: string, email: string) {
+  // Get user database from dropbox, compare entries to current user email to verify login.
+  return fetch("https://content.dropboxapi.com/2/files/download", {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "text/plain",
+      "Dropbox-API-Arg": '{"path":"/user.json"}',
+    },
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      return data;
+    });
+}
 
 const RegisterPage = (props: any) => {
   const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
   const [userReferralCode, setUserReferralCode] = useState("");
+  const [userDB, setUserDB] = useState();
   const navigate = useNavigate();
 
-  async function registerCallback(e: any) {
-    e.preventDefault(); //This is important, i'm not sure why, but the email won't send without it
+  // REGISTRATION WORKFLOW
+  // At initialization:
+  // 1. have user login to dropbox via redirect
+  // 2. call get_current_account to get user email from dropbox account
+  // 3. confirm user does not already exist with email
+  // 4. validate referral code exists in user.json
+  // 5. add all details to inputs in page, waiting for user to click 'register' button after entering referral code
+  // After 'register' button click:
+  // 6. confirm referral code entered is valid from database
+  // 7. generate new user's referral number
+  // 8. append new user details (email and referral number) to user.json
+  // 9. confirm registration is complete via popup window
+  // 10. navigate back to landing page
 
-    // 1. confirm user does not already exist with email
-    // 2. validate referral code
-    // 3. get dropbox user file and append new user details
-
-    // const accessToken = "<API ACCESS TOKEN>";
-
-    // fetch("https://content.dropboxapi.com/2/files/download", {
-    //   method: "POST",
-    //   headers: {
-    //     authorization: "Bearer " + accessToken,
-    //     "Content-Type": "text/plain",
-    //     "Dropbox-API-Arg": '{"path":"/user.json"}',
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     navigate("/");
-    //   });
-
-    emailjs
-      .sendForm(
-        process.env.REACT_APP_EMAILJS_SERVICE_ID,
-        "YOUR_TEMPLATE_ID",
-        e.target,
-        process.env.REACT_APP_EMAILJS_USER_ID
-      )
-      .then(
-        (result: any) => {
-          window.location.reload(); //This is if you still want the page to reload (since e.preventDefault() cancelled that behavior)
-        },
-        (error: any) => {
-          console.log(error.text);
-        }
-      );
+  function uploadDBFile(accessToken: string, blob: any) {
+    return fetch("https://content.dropboxapi.com/2/files/upload", {
+      method: "POST",
+      headers: {
+        authorization: "Bearer " + accessToken,
+        "Content-Type": "application/octet-stream",
+        "Dropbox-API-Arg":
+          '{"autorename":false,"mode":"overwrite","mute":false,"path":"/user.json","strict_conflict":false}',
+      },
+      body: blob,
+    });
   }
+
+  async function registerCallback(props: any) {
+    const db: any = userDB;
+
+    if (userEmail === undefined || db === undefined) {
+      alert("ERROR! Unknown error reading dropbox data");
+      return;
+    }
+
+    if (
+      db.entries.find((entry: any) => entry.email === userEmail) !== undefined
+    ) {
+      alert("ERROR! User Dropbox account is already registered");
+      return;
+    }
+
+    db.entries.push({ email: userEmail, referralCode: "092399" });
+    props.doTokenRefresh(props.refreshToken)?.then((res01: string) => {
+      uploadDBFile(res01, JSON.stringify(db)).then(() => {
+        setUserDB(db);
+        alert("Account registered.");
+        navigate("/landing");
+      });
+    });
+  }
+
+  useEffect(() => {
+    // If on this page after 'dropbox_register' redirect, there will be a query string with the 'code' value for the token api.
+    const queryParams = new URLSearchParams(window.location.search);
+    if (queryParams.get("code")) {
+      const requestToken = queryParams.get("code") ?? "";
+      props.setRequestToken(requestToken);
+      getAuthToken(requestToken)?.then((res0) => {
+        if (res0.access_token === undefined) {
+          return;
+        }
+        props.setAccessToken(res0.access_token);
+        props.setRefreshToken(res0.refresh_token);
+        props.setUserScopes(res0.scope);
+        props.doTokenRefresh(res0.refresh_token)?.then((res01: string) => {
+          props.setAccessToken(res01);
+          getCurrentAccount(res01)?.then((res1: any) => {
+            props.doTokenRefresh(res0.refresh_token).then((tk2: string) => {
+              props.setAccessToken(tk2);
+              getUserDB(tk2, res1.account.email)?.then((res2) => {
+                if (res2 !== undefined) {
+                  setUserDB(res2);
+                  setUserEmail(res1.account.email);
+                }
+              });
+            });
+          });
+        });
+      });
+    }
+  });
 
   return (
     <>
@@ -77,27 +163,20 @@ const RegisterPage = (props: any) => {
         </Title>
         <TextInput
           label="Email"
-          onChange={(e) => setUserEmail(e.target.value)}
+          disabled
           value={userEmail}
           title="Email"
         ></TextInput>
-        <PasswordInput
-          label="Password"
-          onChange={(e) => setUserPassword(e.target.value)}
-          value={userPassword}
-          title="Password"
-          withAsterisk={true}
-        ></PasswordInput>
         <TextInput
           label="Referral Code"
           onChange={(e) => setUserReferralCode(e.target.value)}
           value={userReferralCode}
-          title="Referral Code"
+          title="Referral Code (required)"
           withAsterisk={true}
         ></TextInput>
         <br />
         <Button
-          onClick={registerCallback}
+          onClick={(e) => registerCallback(props)}
           style={{ width: "50%", alignSelf: "center" }}
         >
           Register

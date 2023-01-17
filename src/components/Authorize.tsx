@@ -2,30 +2,12 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Buffer } from "buffer";
 
-interface AuthorizeProps {
-  accessToken: string;
-  setAccessToken: any;
-  requestToken: string;
-  setRequestToken: any;
-  refreshToken: string;
-  setRefreshToken: any;
-  doTokenRefresh: any;
-  userScopes: string;
-  setUserScopes: any;
-  setLoggedIn: any;
-  loggedIn: string;
-  email: string;
-  setEmail: any;
-  password: string;
-  setPassword: any;
-}
-
 function getAuthToken(requestToken: string) {
   const b64Auth = Buffer.from(
     `${process.env.REACT_APP_CLIENT_ID}:${process.env.REACT_APP_CLIENT_SECRET}`
   ).toString("base64");
   return fetch(
-    `https://api.dropboxapi.com/oauth2/token?code=${requestToken}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}`,
+    `https://api.dropboxapi.com/oauth2/token?code=${requestToken}&grant_type=authorization_code&redirect_uri=${process.env.REACT_APP_LOGIN_REDIRECT_URL}`,
     {
       method: "POST",
       headers: {
