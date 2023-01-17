@@ -2,6 +2,7 @@ import MainPage from "./screens/MainPage";
 import RegisterPage from "./screens/RegisterPage";
 import SettingsPage from "./screens/SettingsPage";
 import AppHeader from "./components/AppHeader";
+import DatabaseContents from "./components/DatabaseContents";
 import Error404Page from "./screens/Error404Page";
 import { useEffect, useState } from "react";
 import { AppShell } from "@mantine/core";
@@ -58,6 +59,7 @@ export default function App() {
     <AppShell
       style={{ background: "#E9ECE6", border: "solid" }}
       layout="alt"
+      navbar={loggedIn ? <DatabaseContents /> : undefined}
       header={
         <AppHeader
           email={email}
