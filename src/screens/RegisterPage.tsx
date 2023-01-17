@@ -38,7 +38,7 @@ function getCurrentAccount(token: string) {
     });
 }
 
-function getUserDB(token: string, email: string) {
+function getUserDB(token: string) {
   // Get user database from dropbox, compare entries to current user email to verify login.
   return fetch("https://content.dropboxapi.com/2/files/download", {
     method: "POST",
@@ -63,7 +63,7 @@ const RegisterPage = (props: any) => {
   const navigate = useNavigate();
 
   // REGISTRATION WORKFLOW
-  // At initialization:
+  // At initialization - see 'useEffect()' statement below:
   // 1. have user login to dropbox via redirect
   // 2. call get_current_account to get user email from dropbox account
   // 3. confirm user does not already exist with email
@@ -89,6 +89,15 @@ const RegisterPage = (props: any) => {
     });
   }
 
+  function randomReferralCodeString(length: number) {
+    const chars =
+      "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var result = "";
+    for (var i = length; i > 0; --i)
+      result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+  }
+
   async function registerCallback(props: any) {
     const db: any = userDB;
 
@@ -98,13 +107,25 @@ const RegisterPage = (props: any) => {
     }
 
     if (
-      db.entries.find((entry: any) => entry.email === userEmail) !== undefined
+      db.entries.find((entry: any) => entry.email !== userEmail) !== undefined
     ) {
       alert("ERROR! User Dropbox account is already registered");
       return;
     }
 
-    db.entries.push({ email: userEmail, referralCode: "092399" });
+    if (
+      db.entries.find(
+        (entry: any) => entry.referralCode === userReferralCode
+      ) === undefined
+    ) {
+      alert("ERROR! Invalid referral code.");
+      return;
+    }
+
+    db.entries.push({
+      email: userEmail,
+      referralCode: randomReferralCodeString(8),
+    });
     props.doTokenRefresh(props.refreshToken)?.then((res01: string) => {
       uploadDBFile(res01, JSON.stringify(db)).then(() => {
         setUserDB(db);
@@ -132,7 +153,7 @@ const RegisterPage = (props: any) => {
           getCurrentAccount(res01)?.then((res1: any) => {
             props.doTokenRefresh(res0.refresh_token).then((tk2: string) => {
               props.setAccessToken(tk2);
-              getUserDB(tk2, res1.account.email)?.then((res2) => {
+              getUserDB(tk2)?.then((res2) => {
                 if (res2 !== undefined) {
                   setUserDB(res2);
                   setUserEmail(res1.account.email);
